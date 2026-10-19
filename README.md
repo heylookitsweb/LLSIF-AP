@@ -9,7 +9,7 @@ This is my first APWorld and my code for the server is definitely not perfect, s
 - Checks are sent for clearing / achieving score ranks / achieving full combos in live shows.
 - Items available to receive are unlocks for new live shows to play.
 - Filler items are Gs, Love Gems Friend Points, and Support Units. (Can be configures in your options)
-- Items can be collected through the Present Box in the Home menu.
+- Items can be collected through the Present Box in the Home Menu.
      - Currently, unlocked Live Shows will not appear until your save is reloaded, due to limitations with the game client. Clicking the `What's New` button in the Home Menu will return you to the title screen and update your song list.
 - Failing a live show or quitting early will send a Deathlink, if enabled.
 
