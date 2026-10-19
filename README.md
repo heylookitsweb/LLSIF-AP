@@ -1,6 +1,9 @@
 # LLSIF-AP
 Archipelago Multiworld implementation for Love Live! School idol festival, built on the [NPPS4 Private Server](https://github.com/DarkEnergyProcessor/NPPS4).
 
+# DISCLAIMER
+This is my first APWorld and my code for the server is definitely not perfect, so issues are very possible. If you run into any errors, please open an issue describing how it happened, or contact me in this APWorld's post on Discord.
+
 # AP Implementation
 - Your goal is finishing a select amount of unique live shows, set in the options for your slot.
 - Checks are sent for clearing / achieving score ranks / achieving full combos in live shows.
@@ -9,9 +12,6 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 - Items can be collected through the Present Box in the Home menu.
      - Currently, unlocked Live Shows will not appear until your save is reloaded, due to limitations with the game client. Clicking the `What's New` button in the Home Menu will return you to the title screen and update your song list.
 - Failing a live show or quitting early will send a Deathlink, if enabled.
-
-# DISCLAIMER
-This is my first APWorld and my code for the server is definitely not perfect, so issues are very possible. If you run into any errors, please open an issue describing how it happened, or contact me in this APWorld's post on Discord.
 
 # Requirements
 - Python 3.12
