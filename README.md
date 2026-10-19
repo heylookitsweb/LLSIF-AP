@@ -13,6 +13,6 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 # Connecting
 1. Start your private server following the steps in [Running](https://github.com/DarkEnergyProcessor/NPPS4/blob/master/README.md#running)
 2. Create a patched game client using [https://ethanaobrien.github.io/sif-patcher/](url)
-   - (Server URL should be the ip address and port of the computer you are hosting the NPPS4 server on, Ex. `http://111.222.33.44:12345`. Your mobile device must be connected to the same internet connection as your computer.)
-4. Using your installed client, start your game, and connect to the Archipelago server using the popup.
+   - (Server URL should be the ip address and port of the computer you are hosting the NPPS4 server on, Ex. `http://192.0.2.0:8000`. Your mobile device must be connected to the same internet connection as your computer.)
+4. Using your installed client, start your game, and login to the Archipelago server using the popup.
 5. You will be redirected to the appropriate save file for your Multiworld session.
