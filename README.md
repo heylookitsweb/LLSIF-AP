@@ -31,3 +31,6 @@ This is my first APWorld and my code for the server is definitely not perfect, s
 4. Using your installed client, start your game, and login to the Archipelago server using the popup.
 5. You will be redirected to the appropriate save file for your Multiworld session.
 
+# Credits
+- [NPPS4](https://github.com/DarkEnergyProcessor/NPPS4) Private Server by MikuAuahDark
+- [archipelagopy](https://github.com/blackoutroulette/archipelagopy) by blackoutroulette (API wrapper for Archipelago, used to create the client used in the server)
