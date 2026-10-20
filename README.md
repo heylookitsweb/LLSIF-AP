@@ -15,7 +15,7 @@ This is my first APWorld and my code for the server is definitely not perfect, s
 
 # Requirements
 - Python 3.12
-- A copy of NPPS4's source files (Archipelago tested on commit [9edf806](https://github.com/DarkEnergyProcessor/NPPS4/tree/9edf8066ac4f941760d499faea2e803e59b074d9), may not work correctly on newer or older builds.)
+- A copy of [NPPS4](https://github.com/DarkEnergyProcessor/NPPS4)'s source files, extracted to a folder (Archipelago tested on commit [9edf806](https://github.com/DarkEnergyProcessor/NPPS4/tree/9edf8066ac4f941760d499faea2e803e59b074d9), may not work correctly on newer or older builds.)
 
 # Installation
 1. Navigate to the directory of your NPPS4 source files
