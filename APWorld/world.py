@@ -8,9 +8,6 @@ from . import options as yaml_options
 from .item_data import unitlist, supportlist
 
 class LLSIFWorld(World):
-    """
-    Play through Live Shows, read stories about the many interesting and unique characters, join in the events, and create and strengthen your own team of school idols!
-    """
 
     game = "Love Live! School idol festival"
 
