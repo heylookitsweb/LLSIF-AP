@@ -135,9 +135,6 @@ def create_regular_locations(world: LLSIFWorld) -> None:
                         if value in range(105000,106000):
                             region.add_locations(get_location_names_with_ids([key]), LLSIFLocation)
                             included_live_locations.append(key)
-        elif value >= 200000:
-            if world.options.unitsanity:
-                region.add_locations(get_location_names_with_ids([key]), LLSIFLocation)
 
     counter = 1
     for chapter in scenariolist:
@@ -151,5 +148,23 @@ def create_regular_locations(world: LLSIFWorld) -> None:
                     if 2 in items.included_group_ids:
                         region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]} - {story["name_en"]}"]), LLSIFLocation)
                 counter += 1
+
+    if world.options.unitsanity:
+        for unit in unitlist:
+            name = unit["name_en"]
+            eponym = unit["eponym_en"]
+            if eponym is None:
+                region.add_locations(get_location_names_with_ids([f"{name} ({unit["id"]})"]), LLSIFLocation)
+            else:
+                region.add_locations(get_location_names_with_ids([f"{eponym} - {name}"]), LLSIFLocation)
+
+        for support in supportlist:
+            name = support["name_en"]
+            eponym = support["eponym_en"]
+
+            if eponym is None:
+                region.add_locations(get_location_names_with_ids([f"{name} ({support["id"]})"]), LLSIFLocation)
+            else:
+                region.add_locations(get_location_names_with_ids([f"{eponym} - {name}"]), LLSIFLocation)
 
     region.add_event("Goal Live Count Completed", "Victory", location_type=LLSIFLocation, item_type=items.LLSIFItem)
