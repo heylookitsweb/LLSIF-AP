@@ -16,7 +16,7 @@ This is my first APWorld, so issues are very possible. If you run into any error
 1. 
 
 # Connecting
-1. Create a patched game client using [https://ethanaobrien.github.io/sif-patcher/](url)
+1. Create a patched game client using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/)
    - Server URL should be the ip address and port of the computer you are hosting the NPPS4 server on, Ex. `http://192.0.2.0:8000`.
    - Your mobile device must be connected to the same internet connection as your computer.
    - If needed, the private server address can be changed through the app's settings.
