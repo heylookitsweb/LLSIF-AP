@@ -127,12 +127,12 @@ def create_all_items(world: LLSIFWorld) -> None:
         
     if 1 in included_group_ids and world.options.story_checks:
         world.push_precollected(world.create_item("Progressive μ's Main Story"))
-        for i in range(1,48):
+        for i in range(1,49):
             itempool.append(world.create_item("Progressive μ's Main Story"))
 
     if 2 in included_group_ids and world.options.story_checks:
         world.push_precollected(world.create_item("Progressive Aqours Main Story"))
-        for i in range(1,37):
+        for i in range(1,38):
             itempool.append(world.create_item("Progressive Aqours Main Story"))
 
     # Add ensured Love Gems to the item pool, to make affording shop items more consistent.
