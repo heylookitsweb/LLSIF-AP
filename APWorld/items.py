@@ -105,7 +105,7 @@ def create_all_items(world: LLSIFWorld) -> None:
     global included_group_ids
 
     #Average sticker per gacha pull, per Honor Scout box. 
-    #Used to include ensured enough Love Gems items are in circulation to afford important Sticker Shop items.
+    #Used to include ensured enough Love Gem items are in circulation to afford important Sticker Shop items.
     sticker_rates = [2.08654388075, 1.84680207989, 1.06009035698, 2.0663562753]
 
     for key, value in ITEM_NAME_TO_ID.items():
@@ -125,17 +125,14 @@ def create_all_items(world: LLSIFWorld) -> None:
     for live in starting_lives:
         world.push_precollected(world.create_item(live))
         
-    if 1 in included_group_ids:
+    if 1 in included_group_ids and world.options.story_checks:
         world.push_precollected(world.create_item("Progressive μ's Main Story"))
-    if 2 in included_group_ids:
-        world.push_precollected(world.create_item("Progressive Aqours Main Story"))
-
-    for i in range(1,48):
-        if 1 in included_group_ids:
+        for i in range(1,48):
             itempool.append(world.create_item("Progressive μ's Main Story"))
 
-    for i in range(1,37):
-        if 2 in included_group_ids:
+    if 2 in included_group_ids and world.options.story_checks:
+        world.push_precollected(world.create_item("Progressive Aqours Main Story"))
+        for i in range(1,37):
             itempool.append(world.create_item("Progressive Aqours Main Story"))
 
     # Add ensured Love Gems to the item pool, to make affording shop items more consistent.

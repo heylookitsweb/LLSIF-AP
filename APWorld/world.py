@@ -69,6 +69,7 @@ class LLSIFWorld(World):
             "live_difficulty",
             "live_rank",
             "fc_checks",
+            "story_checks",
             "shop_checks",
             "individual_difficulty",
             "included_difficulty",

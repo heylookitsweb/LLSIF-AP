@@ -10,7 +10,7 @@ class LiveCount(Range):
 
     display_name = "Goal Live Show Completion Count"
 
-    range_start = 10
+    range_start = 5
     range_end = 248
     default = 20
 
@@ -91,6 +91,14 @@ class FullComboChecks(Toggle):
 
     display_name = "Full Combo Checks"
 
+class MainStoryChecks(Toggle):
+    """
+    Add checks for reading unlocked Main Story chapters for μ's and Aqours.
+    Not required for completion.
+    """
+
+    display_name = "Main Story Checks"
+
 class ShopChecks(Range):
     """
     The number of AP Items (Location Checks) available to buy in the Sticker Shop.
@@ -166,6 +174,7 @@ class LLSIFOptions(PerGameCommonOptions):
     live_difficulty: LiveDifficulty
     live_rank: LiveRank
     fc_checks: FullComboChecks
+    story_checks: MainStoryChecks
     shop_checks: ShopChecks
     individual_difficulty: IndividualDifficulty
     included_difficulty: IncludedDifficulty

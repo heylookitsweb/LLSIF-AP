@@ -137,17 +137,18 @@ def create_regular_locations(world: LLSIFWorld) -> None:
                             included_live_locations.append(key)
 
     counter = 1
-    for chapter in scenariolist:
-        for story in chapter["episodes"]:
-            if chapter["id"] < 100 or chapter["id"] == 1000 or chapter["id"] == 2000:
-                chap = chapter["name_en"].split(" - ")
-                if counter <= 183:
-                    if 1 in items.included_group_ids:
-                        region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]} - {story["name_en"]}"]), LLSIFLocation)
-                else:
-                    if 2 in items.included_group_ids:
-                        region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]} - {story["name_en"]}"]), LLSIFLocation)
-                counter += 1
+    if world.options.story_checks:
+        for chapter in scenariolist:
+            for story in chapter["episodes"]:
+                if chapter["id"] < 100 or chapter["id"] == 1000 or chapter["id"] == 2000:
+                    chap = chapter["name_en"].split(" - ")
+                    if counter <= 183:
+                        if 1 in items.included_group_ids:
+                            region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]} - {story["name_en"]}"]), LLSIFLocation)
+                    else:
+                        if 2 in items.included_group_ids:
+                            region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]} - {story["name_en"]}"]), LLSIFLocation)
+                    counter += 1
 
     if world.options.unitsanity:
         for unit in unitlist:
