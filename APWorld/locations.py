@@ -55,7 +55,9 @@ for track in tracklist:
 for id in range(1,51):
     LOCATION_NAME_TO_ID[f"Sticker Shop - Item {id}"] = id
 
+# Disabled for now, needlessly bloats location data and is useless until I add the evil feature its used for
 for unit in unitlist:
+    break
     name = unit["name_en"]
     eponym = unit["eponym_en"]
 
@@ -64,7 +66,9 @@ for unit in unitlist:
     else:
         LOCATION_NAME_TO_ID[f"{eponym} - {name}"] = (200000 + unit["id"])
 
+# Same as above
 for support in supportlist:
+    break
     name = support["name_en"]
     eponym = support["eponym_en"]
 
@@ -94,8 +98,10 @@ def create_all_locations(world: LLSIFWorld) -> None:
 
 
 def create_regular_locations(world: LLSIFWorld) -> None:
+
     all_lives = world.all_lives
     live_names = []
+    included_live_locations = []
     for live in all_lives:
         live_names.append(live.split(" - ")[1])
     
@@ -134,17 +140,18 @@ def create_regular_locations(world: LLSIFWorld) -> None:
                         if value in range(105000,106000):
                             region.add_locations(get_location_names_with_ids([key]), LLSIFLocation)
                             included_live_locations.append(key)
+    world.included_live_locations = included_live_locations
 
     counter = 1
     if world.options.story_checks:
         for chapter in scenariolist:
             if chapter["id"] < 100 or chapter["id"] == 1000 or chapter["id"] == 2000:
                 chap = chapter["name_en"].split(" - ")
-                if counter <= 183:
-                    if 1 in items.included_group_ids:
+                if counter <= 48:
+                    if 1 in world.included_group_ids and not counter == 1:
                         region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]}"]), LLSIFLocation)
                 else:
-                    if 2 in items.included_group_ids:
+                    if 2 in world.included_group_ids and not counter == 49:
                         region.add_locations(get_location_names_with_ids([f"{chap[len(chap)-1]}"]), LLSIFLocation)
                 counter += 1
 
@@ -166,4 +173,6 @@ def create_regular_locations(world: LLSIFWorld) -> None:
             else:
                 region.add_locations(get_location_names_with_ids([f"{eponym} - {name}"]), LLSIFLocation)
 
-    region.add_event("Goal Live Count Completed", "Victory", location_type=LLSIFLocation, item_type=items.LLSIFItem)
+    #region.add_event("Goal Live Count Completed", "Victory", location_type=LLSIFLocation, item_type=items.LLSIFItem)
+
+    print("LOC")

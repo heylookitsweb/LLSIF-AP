@@ -10,16 +10,14 @@ if TYPE_CHECKING:
     from .world import LLSIFWorld
 
 GROUP_ID_TO_NAME = ["N/A", "μ's", "Aqours", "Nijigasaki", "Liella!"]
-live_options = []
-progression_lives = []
-extra_lives = []
-starting_lives = []
+
 support_units = []
 filler_options = []
 bg_options = []
 
+
 ITEM_NAME_TO_ID = {
-    "5 Love Gems": 1,
+    "Love Gem": 1,
     "100 Gs": 2,
     "1000 Gs": 3,
     "5000 Gs": 4,
@@ -32,7 +30,7 @@ ITEM_NAME_TO_ID = {
 }
 
 DEFAULT_ITEM_CLASSIFICATIONS = {
-    "5 Love Gems": ItemClassification.filler,
+    "Love Gem": ItemClassification.filler,
     "100 Gs": ItemClassification.filler,
     "1000 Gs": ItemClassification.filler,
     "5000 Gs": ItemClassification.filler,
@@ -96,13 +94,15 @@ def create_item_with_correct_classification(world: LLSIFWorld, name: str) -> LLS
     return LLSIFItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 def create_all_items(world: LLSIFWorld) -> None:
+    global included_group_ids
     global progression_lives
-    global extra_lives
     global starting_lives
+    global extra_lives
     global filler_options
     global bg_options
-    global included_groups
-    global included_group_ids
+
+    filler_options = []
+    bg_options = []
 
     #Average sticker per gacha pull, per Honor Scout box. 
     #Used to include ensured enough Love Gem items are in circulation to afford important Sticker Shop items.
@@ -111,36 +111,35 @@ def create_all_items(world: LLSIFWorld) -> None:
     for key, value in ITEM_NAME_TO_ID.items():
         if value < 1000:
             filler_options.append(key)
-    bg_options = []
     for bg in bglist:
-        if bg["group"] == 0 or bg["group"] in included_group_ids:
+        if bg["group"] == 0 or bg["group"] in world.included_group_ids:
             bg_options.append(bg["name_en"])
     itempool: list[Item] = []
 
-    for live in progression_lives:
-        if not live in starting_lives:
+    for live in world.progression_lives:
+        if not live in world.starting_lives:
             itempool.append(world.create_item(live))
-    for live in extra_lives:
+    for live in world.extra_lives:
         itempool.append(world.create_item(live))
-    for live in starting_lives:
+    for live in world.starting_lives:
         world.push_precollected(world.create_item(live))
         
-    if 1 in included_group_ids and world.options.story_checks:
+    if 1 in world.included_group_ids and world.options.story_checks:
         world.push_precollected(world.create_item("Progressive μ's Main Story"))
         for i in range(1,49):
             itempool.append(world.create_item("Progressive μ's Main Story"))
 
-    if 2 in included_group_ids and world.options.story_checks:
+    if 2 in world.included_group_ids and world.options.story_checks:
         world.push_precollected(world.create_item("Progressive Aqours Main Story"))
         for i in range(1,38):
             itempool.append(world.create_item("Progressive Aqours Main Story"))
 
-    # Add ensured Love Gems to the item pool, to make affording shop items more consistent.
+    # Add guaranteed Love Gems to the item pool, to make affording shop items more consistent.
     if world.options.shop_checks > 0:
         big_number = 0
-        for group in included_group_ids:
+        for group in world.included_group_ids:
             big_number += sticker_rates[group-1]
-        big_number /= len(included_group_ids)
+        big_number /= len(world.included_group_ids)
         item_count = (world.options.shop_checks * 10) / big_number
         for item in range(0,round(item_count)):
             itempool.append(world.create_item("5 Love Gems*"))
@@ -156,44 +155,25 @@ def create_all_items(world: LLSIFWorld) -> None:
 
     world.multiworld.itempool += itempool
 
-def get_lives():
-    global progression_lives
-    global extra_lives
-    global starting_lives
-    global goal_live_count
-    global extra_live_count
-    global live_start_count
+def get_lives(world: LLSIFWorld):
     progression_ids = []
     extra_ids = []
     starting_ids = []
-    for live in progression_lives:
+    for live in world.progression_lives:
         progression_ids.append(ITEM_NAME_TO_ID[live])
-    for live in extra_lives:
+    for live in world.extra_lives:
         extra_ids.append(ITEM_NAME_TO_ID[live])
-    for live in starting_lives:
+    for live in world.starting_lives:
         starting_ids.append(ITEM_NAME_TO_ID[live])
-    return {"progression": progression_lives, "extra": extra_lives, "starting": starting_lives}, {"progression": progression_ids, "extra": extra_ids, "starting": starting_ids}
+    return {"progression": world.progression_lives, "extra": world.extra_lives, "starting": world.starting_lives}, {"progression": progression_ids, "extra": extra_ids, "starting": starting_ids}
 
 def calculate_available_lives(world: LLSIFWorld):
-    global live_options
-    global progression_lives
-    global extra_lives
-    global starting_lives
-    global support_units
-    global included_groups
-    global goal_live_count
-    global live_start_count
-    global extra_live_count
-    global included_group_ids
-
-
-
-
     # get a random selection of Live Show tracks to include in the item / location pool,
     # and select which tracks will be given as starting items
     live_options = []
     included_groups = []
     included_group_ids = []
+
     for unit in world.options.included_groups:
         if "Muse" in unit:
             unit = "μ's"
@@ -217,6 +197,15 @@ def calculate_available_lives(world: LLSIFWorld):
 
     live_options = [live for live in live_options if not live in progression_lives]
     extra_lives = world.random.sample(live_options, k=extra_live_count)
+
+    world.included_groups = included_groups
+    world.included_group_ids = included_group_ids
+    world.goal_live_count = goal_live_count
+    world.extra_live_count = extra_live_count
+    world.live_start_count = live_start_count
+    world.progression_lives = progression_lives
+    world.starting_lives = starting_lives
+    world.extra_lives = extra_lives
 
 
     

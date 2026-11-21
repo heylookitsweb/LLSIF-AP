@@ -16,26 +16,20 @@ class LLSIFWorld(World):
 
     location_name_to_id = locations.LOCATION_NAME_TO_ID
     item_name_to_id = items.ITEM_NAME_TO_ID
-    item_name_groups: Dict[str, Set] = {
-        "Live Shows": set()
-    }   
     
     origin_region_name = "Menu"
-    all_lives = []
-    included_live_locations = []
-    start_lives = []
-    start_ids = []
 
     def create_regions(self) -> None:
+        self.all_lives = []
+        self.start_lives = []
+        self.start_ids = []
         regions.create_and_connect_regions(self)
         items.calculate_available_lives(self)
-        lives, live_ids = items.get_lives()
-        self.included_live_locations = locations.included_live_locations
+        lives, live_ids = items.get_lives(self)
         for live in lives["progression"]:
             self.all_lives.append(live)
         for live in lives["extra"]:
             self.all_lives.append(live)
-        self.item_name_groups["Live Shows"] = frozenset(self.all_lives)
         for live in lives["starting"]:
             self.all_lives.append(live)
             self.start_lives.append(live)
@@ -80,12 +74,12 @@ class LLSIFWorld(World):
         )
         options_dict["starting_lives"] = self.start_ids
         # resetting / capping options based on if they are possible / invalid
-        options_dict["live_count"] = int(items.goal_live_count)
-        options_dict["included_groups"] = items.included_group_ids
+        options_dict["live_count"] = int(self.goal_live_count)
+        options_dict["included_groups"] = self.included_group_ids
         options_dict["individual_difficulty"] = bool(len(list(options_dict["included_difficulty"])) > 0)
 
         # randomize the UR cards given to you when you start a save, accounting for all variations of included groups
-        included_groups = items.included_group_ids
+        included_groups = self.included_group_ids
 
         unit_options = [[],[],[],[]]
         for id in range(0,len(char_names)):
@@ -93,7 +87,7 @@ class LLSIFWorld(World):
                 unit_options[id].append([])
 
         for unit in unitlist:
-            if unit["rarity"] == 4 and not unit["group"] == 0 and unit["group"] in items.included_group_ids:
+            if unit["rarity"] == 4 and not unit["group"] == 0 and unit["group"] in included_groups:
                 unit_options[unit["group"]-1][char_names[unit["group"]-1].index(unit["name_en"])].append(unit["id"])
 
         if 1 in included_groups and 2 in included_groups:

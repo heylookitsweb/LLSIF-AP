@@ -16,7 +16,7 @@ class LiveCount(Range):
 
 class LiveStartCount(Range):
     """
-    Number of random Live Shows that your new save starts with.
+    Number of Live Shows that your new save starts with.
     """
 
     display_name = "Starting Live Show Count"
@@ -28,13 +28,13 @@ class LiveStartCount(Range):
 class LiveExtraCount(Range):
     """
     Number of Live Shows available to unlock beyond what is required to reach your goal.
-    A value of 0 means you must be given every single Live Show item in the pool in order to reach your goal.
+    It is reccomended to keep this value low, to avoid having your goal available too early.
     """
 
     display_name = "Extra Live Show Count"
 
     range_start = 0
-    range_end = 238
+    range_end = 50
     default = 10
 
 class IncludedGroups(OptionSet):
@@ -43,7 +43,7 @@ class IncludedGroups(OptionSet):
     Deselecting any group in this category will remove their Live Shows, Scouting Boxes, and Main Story checks from randomization.
     If no groups are selected, this option will be ignored.
     If your selected goal amount or included amount of songs is higher than the number of songs available in the pool,
-    the counts will be dropped lower to make clearing your game possible.
+    the counts will be lowered to make clearing your game possible.
     """
 
     display_name = "Included Idol Groups"
@@ -68,10 +68,10 @@ class LiveDifficulty(Choice):
 
 class LiveRank(Choice):
     """
-    Checks will be included for achieving up to the selected Rank on each Live Show at your selected difficulty (or higher).
-    Achieving a rank will also check off every rank below it.
-    To 'complete' a track, you must achieve at least the rank set here.
-    If set to 'Any Rank', simply clearing a track will 'complete' it.
+    Checks will be included for achieving up to this rank on each Live Show track.
+    Obtaining a rank will also send checks for every rank below it.
+    To 'complete' a track, you must obtain at least the rank set here.
+    If set to 'Any Rank', clearing a track with any rank will 'complete' it.
     """
 
     display_name = "Maximum Live Show Rank"
@@ -114,7 +114,7 @@ class IndividualDifficulty(Toggle):
     """
     Adds checks for reaching Live Show goals for each difficulty individually,
     rather than having a single set of checks for each track as a whole.
-    To 'complete' a track, you must achieve your selected Score Rank on every difficulty included difficulty of the track.
+    To 'complete' a track, you must achieve your selected Score Rank on every included difficulty selected below.
     """
 
     display_name = "Individual Difficulty Checks"
@@ -132,7 +132,7 @@ class IncludedDifficulty(OptionSet):
 
 class FillerSupportPercentage(Range):
     """
-    Percent of all filler items that will send you a Support Unit (N Girls).
+    Percentage chance that a filler item will send you a Support Unit (N Girls).
     """
 
     display_name = "Support Unit Filler Percent"
@@ -160,6 +160,7 @@ class Unitsanity(Toggle):
     Adds a check for obtaining one of EVERY unit available from Scouting Boxes.
     (Will massively inflate the number of checks in your game, and is extremely luck-dependant.)
     This option is evil. Please do not turn this on.
+    Not currently implemented.
     """
 
     display_name = "Unitsanity"
