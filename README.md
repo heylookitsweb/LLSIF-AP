@@ -3,17 +3,17 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 
 > [!WARNING]
 > This AP is very early in development and has not been extensively tested.
-> If you run into any problems, please ping me (@ohheywebisherenow) in
+> If you run into any problems or errors, please ping me (@ohheywebisherenow) in
 > this implementation's post in the [Discord](https://discord.gg/Nu4X9gmGDR), 
 > with context and console screenshots if applicable.
 
 # AP Implementation
-- Your goal is finishing a select amount of unique live shows, set in the options for your slot.
+- Your goal is "completing" a select amount of unique live shows. Completion requirements and counts are set in your slot options.
 - Checks are sent for clearing / achieving score ranks / achieving full combos in live shows, and reading Main Story chapters (optionally).
-- Items available to receive are unlocks for new live shows to play, and new Main Story Chapters.
-- Filler items are Gs, Love Gems Friend Points, and Support Units. (Can be configured in your options)
-- Items can be collected through the Present Box in the Home Menu.
-- Failing a live show or quitting early will send a Deathlink, if enabled.
+- Items available to receive are unlocks for new live shows to play, and progressive Main Story Chapters.
+- Filler items are Gs, Love Gems Friend Points, and Support Units.
+- Received items are collected through the Present Box in the Home Menu.
+- Failing a live show or quitting a show early will send a Deathlink, if enabled.
 
 # Requirements
 - Windows Computer (Possible Linux support in the future)
@@ -21,9 +21,8 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 - A personal WiFi connection for the two devices to communicate, or a method to port-forward the server
 
 # Server Setup
-1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server.
-2. Extract the server onto your computer somewhere. (Don't run it straight from the zip!)
-3. Open the server executable:
+1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server and extract it.
+3. Run the server executable:
    - Windows: Run `npps4.exe`
 4. The server will download necessary database files upon first startup, then the server will open.
 5. Use this server whenever you want to play a Multiworld, it holds unique save files for each world you play.
