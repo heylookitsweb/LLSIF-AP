@@ -15,19 +15,19 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 - Received items are collected through the Present Box in the Home Menu.
 - Failing a live show or quitting a show early will send a Deathlink, if enabled.
 
-# Requirements
+## Requirements
 - Windows Computer (Possible Linux support in the future)
 - Phone capable of running SIF (Most devices should work)
 - A personal WiFi connection for the two devices to communicate, or a method to port-forward the server
 
-# Server Setup
+## Server Setup
 1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server and extract it.
 3. Run the server executable:
    - Windows: Run `npps4.exe`
 4. The server will download necessary database files upon first startup, then the server will open.
 5. Use this server whenever you want to play a Multiworld, it holds unique save files for each world you play.
 
-# Connecting
+## Connecting
 1. Create a patched game client using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
    - Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. Ex. `http://192.0.2.0:51376`.
    - Your mobile device must be connected to the same internet connection as your computer. (Unless you are port forwarding)
