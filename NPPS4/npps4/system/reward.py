@@ -15,7 +15,7 @@ from .. import const
 from .. import idol
 from .. import util
 from ..db import main
-from..apworld import ap_client
+from ..apworld import ap_client
 
 
 class RewardCategory(enum.IntEnum):

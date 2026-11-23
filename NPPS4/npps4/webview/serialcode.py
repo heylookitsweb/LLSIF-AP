@@ -78,4 +78,4 @@ async def serial_code_index_post(
         
     except Exception as e:
         util.log("Error while running serial code", severity=util.logging.ERROR, e=e)
-        return SerialCodeAPIResponse(ok=False, msg="Connection Error: " + str(e))
+        return SerialCodeAPIResponse(ok=False, msg=f"Connection Error: {str(e)}")

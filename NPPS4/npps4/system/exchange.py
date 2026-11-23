@@ -11,7 +11,7 @@ from .. import idol
 from .. import util
 from ..db import exchange
 from ..db import main
-from..apworld import ap_client
+from ..apworld import ap_client
 
 from typing import Any
 
