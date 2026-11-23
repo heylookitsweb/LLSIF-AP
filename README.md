@@ -33,9 +33,9 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 ## Connecting
 1. If you haven't installed a patched client, create one using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
    - Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. Ex. `http://192.0.2.0:51376`.
-   - Your mobile device must be connected to the same internet connection as your computer. (Unless you are port forwarding)
    - In the future, the server address can be changed in the app's settings, instead of creating another installer. (To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`)
 3. Start the game, and progress through data download and account creation until you reach the AP login screen.
+   - Your mobile device must be connected to the same internet connection as your computer, unless you are port forwarding.
 4. Login to the Multiworld, and your account will be created/loaded.
 
 # Credits
