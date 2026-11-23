@@ -21,13 +21,13 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 - A personal WiFi connection for the two devices to communicate, or a method to port-forward the server
 
 # Server Setup
-1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server.
-   (Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md) *should* also work, though this hasn't been tested)
+1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server.*
 2. Extract the server onto your computer somewhere. (Don't run it straight from the zip!)
 3. Open the server executable:
    - Windows: Run `npps4.exe`
 4. The server will download necessary database files upon first startup, then the server will open.
 5. Use this server whenever you want to play a Multiworld, it holds unique save files for each world you play.
+* (Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md) *should* also work, though this hasn't been tested)
 
 # Connecting
 1. Create a patched game client using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
