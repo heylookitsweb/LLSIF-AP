@@ -32,8 +32,10 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 
 ## Connecting
 1. If you haven't installed a patched client, create one using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
-   - Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. Ex. `http://192.0.2.0:51376`.
-   - In the future, the server address can be changed in the app's settings, instead of creating another installer. (To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`)
+   - The game installation for the public server will work for this one too, just change the server address as explained below.
+   - The Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. (Ex. `http://192.0.2.0:51376`)
+   - In the future, the server address can be changed in the app's settings, instead of creating another installer.
+   - To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`.
 3. Start the game, and progress through data download and account creation until you reach the AP login screen.
    - Your mobile device must be connected to the same internet connection as your computer, unless you are port forwarding.
 4. Login to the Multiworld, and your account will be created/loaded.
@@ -41,3 +43,10 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 # Credits
 - [NPPS4](https://github.com/DarkEnergyProcessor/NPPS4) Private Server by MikuAuahDark, the vanilla server this implementation is based on.
 - [archipelagopy](https://github.com/blackoutroulette/archipelagopy) by blackoutroulette (API wrapper for Archipelago, used to create the client used in the server)
+
+# License
+This server is a modification of the NPPS4 private server. As such, the same licenses apply here:
+
+   zLib license, excluding any files in `NPPS4/external/`.
+
+   Public domain/unlicense, any files in `NPPS4/external/`.
