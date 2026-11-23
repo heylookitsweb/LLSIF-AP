@@ -28,7 +28,7 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 4. The server will download necessary database files upon first startup, then the server will open.
 5. Use this server whenever you want to play a Multiworld, it holds unique save files for each world you play.
 
-(Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md) *should* also work, though this hasn't been tested)
+(Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md#install-manually) *should* also work, though this hasn't been tested)
 
 ## Connecting
 1. If you haven't installed a patched client, create one using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
