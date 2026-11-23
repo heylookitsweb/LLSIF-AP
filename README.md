@@ -22,6 +22,7 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 
 # Server Setup
 1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server.
+   (Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md) *should* also work, though this hasn't been tested)
 2. Extract the server onto your computer somewhere. (Don't run it straight from the zip!)
 3. Open the server executable:
    - Windows: Run `npps4.exe`
