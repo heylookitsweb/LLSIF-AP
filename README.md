@@ -15,6 +15,10 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 - Items can be collected through the Present Box in the Home Menu.
 - Failing a live show or quitting early will send a Deathlink, if enabled.
 
+## Tracker
+On the computer hosting the server, opening [http://127.0.0.1:51376](http://127.0.0.1:51376) will take you to a tracker page for the connected player, showing live tracks and story chapters you have available checks in. To update the tracker, reload the page.
+(Universal Tracker / other trackers are currently not properly supported.)
+
 ## Requirements
 - Windows Computer (Linux may be supported in the future.)
 - Phone capable of running SIF (Most devices should work)
