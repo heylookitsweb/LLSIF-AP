@@ -1,4 +1,6 @@
 import base64
+import os
+import json
 
 from .. import idol
 from .. import util
@@ -8,9 +10,13 @@ from ..system import common
 from ..system import reward
 from ..system import unit
 from ..system import user
+from ..system import live
+from ..system import scenario
 from ..idol import cache
 from ..idol import error
 from ..idol import session
+from ..config import config
+from ..apworld import ap_client
 
 import fastapi
 import pydantic
@@ -131,7 +137,8 @@ class StarterUnitSelectResponse(pydantic.BaseModel):
 @idol.register("login", "login", check_version=False, batchable=False)
 async def login_login(context: idol.SchoolIdolAuthParams, request: LoginRequest) -> LoginResponse:
     """Login user"""
-
+    global TEMPLATE_DECK
+    global INITIAL_UNIT_IDS
     assert context.token is not None
     # Decrypt credentials
     key = util.xorbytes(context.token.client_key[:16], context.token.server_key[:16])
@@ -141,6 +148,12 @@ async def login_login(context: idol.SchoolIdolAuthParams, request: LoginRequest)
     # Log
     util.log("Hello my key is", loginkey)
     util.log("And my passwd is", passwd)
+
+    if ap_client.is_connected:
+        loginkey = str(ap_client.room_seed).encode()
+        ap_client.initialized = False
+        TEMPLATE_DECK = ap_client.options["starting_supports"]
+        INITIAL_UNIT_IDS = ap_client.options["starting_units"]
 
     # Find user
     u = await user.find_by_key(context, str(loginkey, "UTF-8"))
@@ -154,6 +167,12 @@ async def login_login(context: idol.SchoolIdolAuthParams, request: LoginRequest)
         raise idol.error.locked()
 
     token = await session.encapsulate_token(context, context.token.server_key, context.token.client_key, u.id)
+
+    if ap_client.is_connected:
+        for live_id in ap_client.options["starting_lives"]:
+            await live.unlock_normal_live(context, u, live_id-1000)
+    #await live.unlock_normal_live(context, u, 1)
+
     await cache.clear(context, u.id)
     return LoginResponse(authorize_token=token, user_id=u.id)
 
@@ -182,6 +201,8 @@ async def login_authkey(context: idol.SchoolIdolParams, request: AuthkeyRequest)
 @idol.register("login", "startUp", check_version=False, batchable=False)
 async def login_startup(context: idol.SchoolIdolAuthParams, request: LoginRequest) -> StartupResponse:
     """Register new account."""
+    global TEMPLATE_DECK
+    global INITIAL_UNIT_IDS
 
     assert context.token is not None
     key = util.xorbytes(context.token.client_key[:16], context.token.server_key[:16])
@@ -192,9 +213,22 @@ async def login_startup(context: idol.SchoolIdolAuthParams, request: LoginReques
     util.log("Hello my key is", loginkey)
     util.log("And my passwd is", passwd)
 
+    if ap_client.is_connected:
+        loginkey = str(ap_client.room_seed).encode()
+        TEMPLATE_DECK = ap_client.options["starting_supports"]
+        INITIAL_UNIT_IDS = ap_client.options["starting_units"]
+        
+        
+        
+        
+
     # Create user
     u = await user.create(context, str(loginkey, "UTF-8"), str(passwd, "UTF-8"))
     await session.invalidate_current(context)
+
+    await ap_client.new_user(u.id)
+
+
     return StartupResponse(user_id=str(u.id))
 
 

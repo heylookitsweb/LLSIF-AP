@@ -11,6 +11,7 @@ from .. import idol
 from .. import util
 from ..db import exchange
 from ..db import main
+from..apworld import ap_client
 
 from typing import Any
 
@@ -119,7 +120,7 @@ async def add_exchange_point(
 async def sub_exchange_point(
     context: idol.BasicSchoolIdolContext, /, user: main.User, exchange_point_id: int, quantity: int = 1
 ):
-    if quantity < 1:
+    if quantity < 0:
         raise ValueError("invalid amount")
 
     exchange_point = await get_exchange_point(context, user, exchange_point_id, False)
@@ -244,9 +245,10 @@ async def get_exchange_item_info_by_raw_info(
 
 async def get_exchange_item_info(context: idol.BasicSchoolIdolContext, /, user: main.User):
     server_data = data.get()
+    ap_sticker_shop = await ap_client.update_sticker_shop(server_data.sticker_shop)
     result: list[ExchangeItemBase] = []
 
-    for raw_info in server_data.sticker_shop:
+    for raw_info in ap_sticker_shop:
         time = util.time()
 
         if raw_info.end_time == 0 or raw_info.end_time >= time:

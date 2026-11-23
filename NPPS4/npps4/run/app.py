@@ -9,6 +9,7 @@ from .. import webview
 from .. import other
 from .. import util
 from ..app import app
+from ..apworld import ap_client
 
 from typing import Annotated
 

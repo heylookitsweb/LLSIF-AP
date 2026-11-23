@@ -271,7 +271,8 @@ async def get_random_user_for_partylist(
         .limit(limit)
     )
     result = await context.db.main.execute(q)
-    userlist = list(result.scalars())
+    #userlist = list(result.scalars())
+    userlist = []
     if include_current:
         userlist.insert(0, user)
     return userlist
@@ -289,10 +290,10 @@ async def test_name(context: idol.BasicSchoolIdolContext, name: str):
 _ACHIEVEMENT_REWARD_REPLACE_CRITERIA: dict[
     int, Callable[[idol.BasicSchoolIdolContext, main.User, int], collections.abc.Awaitable[bool]]
 ] = {
-    const.ADD_TYPE.LIVE: live.has_normal_live_unlock,
+    #const.ADD_TYPE.LIVE: live.has_normal_live_unlock,
     const.ADD_TYPE.AWARD: award.has_award,
     const.ADD_TYPE.BACKGROUND: background.has_background,
-    const.ADD_TYPE.SCENARIO: scenario.is_unlocked,
+    #const.ADD_TYPE.SCENARIO: scenario.is_unlocked,
     const.ADD_TYPE.MUSEUM: museum.has,
 }
 

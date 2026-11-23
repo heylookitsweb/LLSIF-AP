@@ -19,7 +19,6 @@ main = fastapi.APIRouter(prefix="/main.php")
 webview = fastapi.APIRouter(prefix="/webview.php", default_response_class=fastapi.responses.HTMLResponse)
 templates = fastapi.templating.Jinja2Templates(os.path.join(config.ROOT_DIR, "templates"))
 
-
 # https://github.com/encode/uvicorn/discussions/1386
 @core.middleware("http")
 async def root_path_from_x_forwarded_prefix(request: fastapi.Request, call_next):
@@ -31,7 +30,7 @@ async def root_path_from_x_forwarded_prefix(request: fastapi.Request, call_next)
 
 @core.get("/")
 def todo_main_page():
-    return fastapi.responses.RedirectResponse("/main.php/api")
+    return fastapi.responses.RedirectResponse("/webview.php/apworld/tracker")
 
 
 def get_token_manual(request: fastapi.Request):

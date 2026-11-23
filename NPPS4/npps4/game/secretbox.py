@@ -117,6 +117,7 @@ LOWEST_RARITY_SORT_ORDER = (1, 2, 3, 5, 4)
 async def secretbox_gachapon(context: idol.SchoolIdolUserParams, request: SecretboxPonRequest) -> SecretboxPonResponse:
     current_user = await user.get_current(context)
     secretbox_id, button_index, cost_index = secretbox.decode_cost_id(request.id)
+    #raise idol.error.IdolError(detail="Invalid amount")
 
     try:
         secretbox_data = secretbox.get_secretbox_data(secretbox_id)

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+	<script>
+		function main() {
+			const serverAddressInput = document.getElementById("server_address");
+			const serverPortInput = document.getElementById("server_port");
+			const slotNameInput = document.getElementById("slot_name");
+			const serverPasswordInput = document.getElementById("server_password");
+			const submitButtom = document.getElementById("submit");
+			const resultButton = document.getElementById("result");
+			const token = document.getElementById("token").value;
+			const lang = document.getElementById("language").value;
+			var inProgress = false;
+
+			submitButtom.addEventListener("click", function () {
+				const key1 = serverAddressInput.value.trim();
+				const key2 = serverPortInput.value.trim();
+				const key3 = slotNameInput.value.trim();
+				const key4 = serverPasswordInput.value.trim();
+				if (inProgress) {
+					return;
+				}
+				if (!key1) {
+					resultButton.textContent = "Please enter a server address";
+					resultButton.style.color = "red";
+					return;
+				}
+				if (!key2) {
+					resultButton.textContent = "Please enter a server port";
+					resultButton.style.color = "red";
+					return;
+				}
+				if (!key3) {
+					resultButton.textContent = "Please enter a slot name";
+					resultButton.style.color = "red";
+					return;
+				}
+				const ts = Math.floor(new Date() / 1000);
+
+				inProgress = true;
+				resultButton.textContent = "Connecting...";
+				resultButton.style.color = "black";
+
+				const xhr = new XMLHttpRequest();
+				xhr.onerror = function onerr(e) {
+					console.error(e);
+					resultButton.textContent = e.toString();
+					resultButton.style.color = "red";
+					inProgress = false;
+				}
+				xhr.onload = function() {
+					if (!xhr.status.toString().startsWith("2")) {
+						return onerr(xhr.response);
+					}
+					const result = JSON.parse(xhr.response);
+					resultButton.textContent = result.msg;
+					resultButton.style.color = result.ok ? "green" : "red"
+					if (result.ok) {
+						inProgress = false;
+					}
+					else {
+						inProgress = false;
+					}
+				}
+				xhr.open("POST", "");
+				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader("Authorize", "consumerKey=lovelive_test&timestamp=" + ts + "&version=1.1&nonce=WV0&token=" + token);
+				xhr.setRequestHeader("LANG", lang);
+				xhr.send(JSON.stringify({
+				    key1: key1,
+					key2: key2,
+					key3: key3,
+					key4: key4,
+				}));
+			})
+		}
+
+		if (document.readyState !== "loading") {
+			main();
+		} else {
+			document.addEventListener("DOMContentLoaded", main);
+		}
+	</script>
+</head>
+
+<body style="padding:1rem;text-align:center">
+	<h3>Connect to APWorld</h3>
+	<input id="token" type="hidden" value="{{token}}">
+	<input id="language" type="hidden" value="{{lang}}">
+	<h4>Server Address</h4>
+	<input id="server_address" type="text" value="archipelago.gg" style="width:100%;text-align:center">
+	<h4>Server Port</h4>
+	<input id="server_port" type="number" value=49445 style="width:100%;text-align:center">
+	<h4>Slot Name</h4>
+	<input id="slot_name" type="text" value="WebLLSIF" style="width:100%;text-align:center">
+	<h4>Password</h4>
+	<input id="server_password" type="password" value="owawa" style="width:100%;text-align:center">
+	<button id="submit" style="width:100%;margin-top:0.25rem">Enter</button>
+	<p id="result" style="white-space:pre-line"></p>
+</body>

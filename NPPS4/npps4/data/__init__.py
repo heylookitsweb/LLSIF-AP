@@ -7,6 +7,7 @@ from . import schema
 from .. import util
 from ..system import item_model
 from ..config import config
+from ..apworld import ap_client
 
 from typing import Callable
 
@@ -52,6 +53,7 @@ def get():
         try:
             with open(SERVER_DATA_PATH, "r", encoding="utf-8", newline="") as f:
                 serialized_data = schema.SerializedServerData.model_validate(json.load(f))
+                serialized_data.secretbox_data = ap_client.update_secretbox_data(serialized_data)
                 new_server_data = ServerData(
                     json_schema_link=serialized_data.json_schema_link,
                     badwords=serialized_data.badwords,

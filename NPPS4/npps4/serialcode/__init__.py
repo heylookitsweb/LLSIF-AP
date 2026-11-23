@@ -9,6 +9,8 @@ from ..data import schema
 from ..db import main
 from ..system import advanced
 from ..system import reward
+from ..system import live_model
+from ..system import item
 
 from typing import Callable
 
@@ -75,3 +77,9 @@ async def execute(
         await context.db.main.flush()
 
     return result_str
+
+async def ap_execute_item(context: idol.BasicSchoolIdolContext, user: main.User, player="N/A", recieved_id=-1):
+    item_data = live_model.LiveItem(item_id=(recieved_id-1000), amount=1)
+    item_data.item_category_id = await item.get_item_category(context, item_data)
+    print(item_data)
+    await reward.add_item(context, user, item_data, "AP Item", f"A gift from {player}!")

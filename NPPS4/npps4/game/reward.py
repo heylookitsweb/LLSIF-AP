@@ -1,5 +1,6 @@
 import enum
 import json
+import os
 
 import pydantic
 
@@ -19,6 +20,8 @@ from ..system import reward
 from ..system import unit
 from ..system import unit_model
 from ..system import user
+from ..apworld import ap_client
+from ..config import config
 
 from typing import Any
 
@@ -124,7 +127,16 @@ class RewardHistoryResponse(pydantic.BaseModel):
 
 @idol.register("reward", "rewardList")
 async def reward_rewardlist(context: idol.SchoolIdolUserParams, request: RewardListRequest) -> RewardListResponse:
+
     current_user = await user.get_current(context)
+    ap_client.linked_user = current_user
+    ap_client.ap_context = context
+    if ap_client.is_connected:
+        await ap_client.reward_sync()
+    else:
+        with open(os.path.join(config.ROOT_DIR, "maintenance.txt"), "w") as maintenance:
+            maintenance.write("Disconnected from APWorld. Please Reconnect.")
+
     incentive = await reward.get_presentbox(
         context,
         current_user,
@@ -154,13 +166,15 @@ async def reward_open(context: idol.SchoolIdolUserParams, request: RewardOpenReq
 
     before_user = await user.get_user_info(context, current_user)
     item_data = await reward.resolve_incentive(context, current_user, incentive)
-    add_result = await advanced.add_item(context, current_user, item_data)
+    if not item_data.add_type == const.ADD_TYPE.LIVE and not item_data.add_type == const.ADD_TYPE.SCENARIO:
+        add_result = await advanced.add_item(context, current_user, item_data)
+    success = bool(item_data.add_type == const.ADD_TYPE.LIVE or item_data.add_type == const.ADD_TYPE.SCENARIO or add_result)
     supp_units = await unit.get_all_supporter_unit(context, current_user)
-    success = bool(add_result)
+    
 
     album_trigger = []
     achievement_update = []
-    if success:
+    if success or item_data.add_type == const.ADD_TYPE.LIVE or item_data.add_type == const.ADD_TYPE.SCENARIO:
         await reward.remove_incentive(context, incentive)
         if item_data.add_type == const.ADD_TYPE.UNIT and len(album_trigger) == 0:
             album_trigger.append(achievement.AchievementUpdateNewUnit())
@@ -174,8 +188,12 @@ async def reward_open(context: idol.SchoolIdolUserParams, request: RewardOpenReq
     else:
         raise idol.error.by_code(idol.error.ERROR_CODE_LIMIT_OVER)
 
+    if ap_client.is_connected:
+        ap_client.create_fake_ach_items([item_data])
+    else:
+        with open(os.path.join(config.ROOT_DIR, "maintenance.txt"), "w") as maintenance:
+            maintenance.write("Disconnected from APWorld. Please Reconnect.")
     achievement_list = await achievement.check(context, current_user, *album_trigger, *achievement_update)
-
     # Give achievement rewards
     accomplished_rewards = [
         await achievement.get_achievement_rewards(context, ach) for ach in achievement_list.accomplished
@@ -186,6 +204,8 @@ async def reward_open(context: idol.SchoolIdolUserParams, request: RewardOpenReq
     await achievement.process_achievement_reward(
         context, current_user, achievement_list.accomplished, accomplished_rewards
     )
+
+    print(accomplished_rewards)
 
     return RewardOpenResponse(
         unit_support_list=[unit_model.SupporterInfoResponse(unit_id=supp[0], amount=supp[1]) for supp in supp_units],
@@ -228,10 +248,13 @@ async def reward_openall(context: idol.SchoolIdolUserParams, request: RewardList
     need_check_unit_ach = False
     achievement_update = []
 
+    item_datas = []
     for incentive in incentives:
         item_data = await reward.resolve_incentive(context, current_user, incentive)
-        add_result = await advanced.add_item(context, current_user, item_data)
-        success = bool(add_result)
+        if not item_data.add_type == const.ADD_TYPE.LIVE and not item_data.add_type == const.ADD_TYPE.SCENARIO:
+            add_result = await advanced.add_item(context, current_user, item_data)
+        success = bool(item_data.add_type == const.ADD_TYPE.LIVE or item_data.add_type == const.ADD_TYPE.SCENARIO or add_result)
+        item_datas.append(item_data)
 
         if success:
             reward_item_list.append(
@@ -250,6 +273,12 @@ async def reward_openall(context: idol.SchoolIdolUserParams, request: RewardList
     if need_check_unit_ach:
         achievement_update.append(achievement.AchievementUpdateNewUnit())
         achievement_update.append(achievement.AchievementUpdateUnitRankUp(unit_ids=[]))
+
+    if ap_client.is_connected:
+        ap_client.create_fake_ach_items(item_datas)
+    else:
+        with open(os.path.join(config.ROOT_DIR, "maintenance.txt"), "w") as maintenance:
+            maintenance.write("Disconnected from APWorld. Please Reconnect.")
 
     achievement_list = await achievement.check(context, current_user, *achievement_update)
 

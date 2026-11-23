@@ -7,6 +7,7 @@ from ..system import museum
 from ..system import reward
 from ..system import scenario
 from ..system import user
+from ..apworld import ap_client
 
 import pydantic
 
@@ -81,11 +82,20 @@ async def scenario_reward(context: idol.SchoolIdolUserParams, request: ScenarioR
     if await scenario.is_completed(context, current_user, request.scenario_id):
         raise idol.error.by_code(idol.error.ERROR_CODE_SCENARIO_NO_REWARD)
 
+    if ap_client.is_connected and ap_client.options["story_checks"] == 1:
+        if (request.scenario_id in range(1,184) and 1 in ap_client.options["included_groups"]) or (request.scenario_id in range(184,333) and 2 in ap_client.options["included_groups"]):
+            ap_client.ap_context = context
+            ap_client.linked_user = current_user
+            await ap_client.check_story_completion(request.scenario_id)
+            ap_client.save_data["tracker"][str(request.scenario_id+4000)] = True
+            ap_client.write_save_file()
+
     # Capture old user info
     old_user_info = await user.get_user_info(context, current_user)
 
     # Mark as complete
-    await scenario.complete(context, current_user, request.scenario_id)
+    if ap_client.is_connected:
+        await scenario.complete(context, current_user, request.scenario_id)
 
     # Trigger achievement
     achievement_list = await achievement.check(

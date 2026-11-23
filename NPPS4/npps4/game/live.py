@@ -26,6 +26,8 @@ from ..system import unit
 from ..system import unit_model
 from ..system import user
 
+from ..apworld import ap_client
+
 from typing import Any
 
 
@@ -366,6 +368,9 @@ DEBUG_SERVER_SCORE_CALCULATE = False
 async def live_partylist(context: idol.SchoolIdolUserParams, request: LivePartyListRequest) -> LivePartyListResponse:
     current_user = await user.get_current(context)
 
+    ap_client.linked_user = current_user
+    ap_client.ap_context = context
+
     # Check live info
     live_info = await live.get_live_info_table(context, request.live_difficulty_id)
     if live_info is None:
@@ -396,7 +401,6 @@ async def live_partylist(context: idol.SchoolIdolUserParams, request: LivePartyL
         await advanced.get_user_guest_party_info(context, u)
         for u in await advanced.get_random_user_for_partylist(context, current_user)
     ]
-
     # DEBUG live score
     if DEBUG_SERVER_SCORE_CALCULATE:
         guest_center_unit_owning_user_id = await unit.get_unit_center(context, current_user)
@@ -507,7 +511,7 @@ async def live_play(context: idol.SchoolIdolUserParams, request: LivePlayRequest
             raise idol.error.by_code(idol.error.ERROR_CODE_LIVE_NOT_ENOUGH_EVENT_POINT)
 
     # Consume LP
-    user.sub_energy(current_user, cap_value)
+    #user.sub_energy(current_user, cap_value)
 
     live_setting = await live.get_live_setting_from_difficulty_id(context, request.live_difficulty_id)
     if live_setting is None:
@@ -563,6 +567,7 @@ async def live_play(context: idol.SchoolIdolUserParams, request: LivePlayRequest
 async def live_gameover(context: idol.SchoolIdolUserParams) -> None:
     current_user = await user.get_current(context)
     await live.clean_live_in_progress(context, current_user)
+    await ap_client.send_deathlink()
 
 
 @idol.register("live", "reward")
@@ -633,6 +638,8 @@ async def live_reward(context: idol.SchoolIdolUserParams, request: LiveRewardReq
     score_rank, combo_rank, clear_rank = live.get_live_ranks(
         live_difficulty_info, live_setting, score, request.max_combo, live_clear_data.clear_cnt
     )
+
+    await ap_client.live_complete(live_setting, score_rank, combo_rank)
 
     # Give live goal rewards
     for reward_data in itertools.chain(live_goal_rewards, special_reward):

@@ -25,7 +25,7 @@ async def maintenance_page(request: fastapi.Request):
             return f.read()
     else:
         # Error?
-        message = "No additional error message available"
+        message = "Returning to title screen."
         authorize = request.headers.get("authorize")
         if authorize is not None:
             authorize_decoded = dict(urllib.parse.parse_qsl(authorize))

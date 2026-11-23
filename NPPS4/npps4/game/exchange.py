@@ -9,6 +9,7 @@ from ..system import exchange
 from ..system import item_model
 from ..system import reward
 from ..system import user
+from ..apworld import ap_client
 
 STACKABLE_ITEMS = (
     const.ADD_TYPE.ITEM,
@@ -87,7 +88,7 @@ async def exchange_usepoint(
         raise idol.error.by_code(idol.error.ERROR_CODE_EXCHANGE_INVALID)
     if raw_exchange_info.end_time != 0 and time > raw_exchange_info.end_time:
         raise idol.error.by_code(idol.error.ERROR_CODE_EXCHANGE_ITEM_OUT_OF_DATE)
-
+    #print(raw_exchange_info)
     exchange_info = await exchange.get_exchange_item_info_by_raw_info(context, current_user, raw_exchange_info, time)
     if (
         isinstance(exchange_info, (exchange.ExchangeItemWithMaxCount, exchange.ExchangeItemWithMaxCountAndExpiry))
@@ -122,31 +123,46 @@ async def exchange_usepoint(
     before_user_info = await user.get_user_info(context, current_user)
 
     # Perform the exchange
-    item_result: list[pydantic.SerializeAsAny[item_model.Item]] = []
-    if raw_exchange_info.add_type in STACKABLE_ITEMS:
-        item_data_copy = item_model.BaseItem(
-            add_type=raw_exchange_info.add_type,
-            item_id=raw_exchange_info.item_id,
-            amount=raw_exchange_info.amount * request.amount,
-            extra_data=raw_exchange_info.extra_data,
-        )
-        item_data = await advanced.deserialize_item_data(context, item_data_copy)
-        item_data.reward_box_flag = True
-        await reward.add_item(context, current_user, item_data, "Sticker Shop")
-        item_result.append(item_data)
+    if ap_client.is_connected:
+        item_result: list[pydantic.SerializeAsAny[item_model.Item]] = []
+
+        if 'ap_item' in raw_exchange_info.id_string:
+            await ap_client.send_check([int(raw_exchange_info.id_string.split("_")[2])])
+            await exchange.sub_exchange_point(context, current_user, exchange_rarity.rarity, required_exchange_point)
+            await exchange.add_exchange_item_got_count(context, current_user, exchange_info.exchange_item_id, request.amount)
+            return ExchangeUsePointResponse(
+                before_user_info=before_user_info,
+                after_user_info=await user.get_user_info(context, current_user),
+                exchange_reward=item_result,
+                present_cnt=await reward.count_presentbox(context, current_user),
+            )
+        else:
+            if raw_exchange_info.add_type in STACKABLE_ITEMS:
+                item_data_copy = item_model.BaseItem(
+                    add_type=raw_exchange_info.add_type,
+                    item_id=raw_exchange_info.item_id,
+                    amount=raw_exchange_info.amount * request.amount,
+                    extra_data=raw_exchange_info.extra_data,
+                )
+                item_data = await advanced.deserialize_item_data(context, item_data_copy)
+                item_data.reward_box_flag = True
+                await reward.add_item(context, current_user, item_data, "Sticker Shop")
+                item_result.append(item_data)
+            else:
+                for _ in range(request.amount):
+                    item_data = await advanced.deserialize_item_data(context, raw_exchange_info)
+                    item_data.reward_box_flag = True
+                    await reward.add_item(context, current_user, item_data, "Sticker Shop")
+                    item_result.append(item_data)
+
+            await exchange.sub_exchange_point(context, current_user, exchange_rarity.rarity, required_exchange_point)
+            await exchange.add_exchange_item_got_count(context, current_user, exchange_info.exchange_item_id, request.amount)
+
+            return ExchangeUsePointResponse(
+                before_user_info=before_user_info,
+                after_user_info=await user.get_user_info(context, current_user),
+                exchange_reward=item_result,
+                present_cnt=await reward.count_presentbox(context, current_user),
+            )
     else:
-        for _ in range(request.amount):
-            item_data = await advanced.deserialize_item_data(context, raw_exchange_info)
-            item_data.reward_box_flag = True
-            await reward.add_item(context, current_user, item_data, "Sticker Shop")
-            item_result.append(item_data)
-
-    await exchange.sub_exchange_point(context, current_user, exchange_rarity.rarity, required_exchange_point)
-    await exchange.add_exchange_item_got_count(context, current_user, exchange_info.exchange_item_id, request.amount)
-
-    return ExchangeUsePointResponse(
-        before_user_info=before_user_info,
-        after_user_info=await user.get_user_info(context, current_user),
-        exchange_reward=item_result,
-        present_cnt=await reward.count_presentbox(context, current_user),
-    )
+        idol.error.by_code(idol.error.ERROR_CODE_NETWORK_ERROR)

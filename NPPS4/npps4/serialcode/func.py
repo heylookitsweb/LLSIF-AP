@@ -23,3 +23,6 @@ async def give_all_supporter_units(context: idol.BasicSchoolIdolContext, user: m
         )
 
     return "Given all supporter members (100x quantity each)."
+
+async def give_apworld_song(context: idol.BasicSchoolIdolContext, user: main.User, /):
+    return "test"

@@ -12,6 +12,8 @@ class AnnounceStateResponse(common.TimestampMixin):
 @idol.register("announce", "checkState")
 async def announce_checkstate(context: idol.SchoolIdolUserParams) -> AnnounceStateResponse:
     current_user = await user.get_current(context)
+    #if True:
+        #raise idol.error.IdolError(detail="Disconnected from APWorld")
     return AnnounceStateResponse(
         present_cnt=await reward.count_presentbox(context, current_user),
         has_unread_announce=False,  # TODO

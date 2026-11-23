@@ -18,6 +18,8 @@ from ..config import config
 from ..db import main
 from ..db import live
 
+from ..apworld import ap_client
+
 from typing import Any, Literal, cast, overload
 
 
@@ -34,20 +36,20 @@ async def unlock_normal_live(context: idol.BasicSchoolIdolContext, user: main.Us
 
 
 async def init(context: idol.BasicSchoolIdolContext, user: main.User):
-    await unlock_normal_live(context, user, 1)  # Bokura no LIVE Kimi to no LIFE
+    #await unlock_normal_live(context, user, 1)  # Bokura no LIVE Kimi to no LIFE
 
     # Unlock the rest of the live shows.
-    unlocked: set[int] = set()
-    q = sqlalchemy.select(live.NormalLive).where(live.NormalLive.default_unlocked_flag == 1)
-    result = await context.db.live.execute(q)
-
-    for normallive in result.scalars():
-        setting_data = await context.db.live.get(live.LiveSetting, normallive.live_setting_id)
-        assert setting_data is not None
-        if setting_data.live_track_id not in unlocked:
-            if await unlock_normal_live(context, user, setting_data.live_track_id):
-                unlocked.add(setting_data.live_track_id)
-
+#    unlocked: set[int] = set()
+#    q = sqlalchemy.select(live.NormalLive).where(live.NormalLive.default_unlocked_flag == 1)
+#    result = await context.db.live.execute(q)
+#
+#    for normallive in result.scalars():
+#        setting_data = await context.db.live.get(live.LiveSetting, normallive.live_setting_id)
+#        assert setting_data is not None
+#        if setting_data.live_track_id not in unlocked:
+#            if await unlock_normal_live(context, user, setting_data.live_track_id):
+#                unlocked.add(setting_data.live_track_id)
+#
     await context.db.main.flush()
 
 
@@ -69,7 +71,6 @@ async def get_live_clear_data(
     )
     result = await context.db.main.execute(q)
     live_clear = result.scalar()
-
     if ensure and live_clear is None:
         live_setting_info = await get_live_setting_from_difficulty_id(context, live_difficulty_id)
         if live_setting_info is None:
@@ -80,7 +81,6 @@ async def get_live_clear_data(
         )
         context.db.main.add(live_clear)
         await context.db.main.flush()
-
     return live_clear
 
 
@@ -110,6 +110,8 @@ async def live_status_from_live_clear(
             achieved_goal_id_list=[],
         )
     else:
+        #debug_goals = await get_achieved_goal_id_list(context, live_clear)
+        #print(str(debug_goals))
         return live_model.LiveStatus(
             live_difficulty_id=live_difficulty_id,
             status=1 + (live_clear.clear_cnt > 0),
@@ -288,6 +290,7 @@ def get_live_ranks(live_info: live.CommonLive, live_setting: live.LiveSetting, s
 async def get_achieved_goal_id_list(context: idol.BasicSchoolIdolContext, clear_info: main.LiveClear):
     live_info = await get_live_info_table(context, clear_info.live_difficulty_id)
     result: list[int] = []
+    debugresult = []
     if live_info is not None:
         live_setting = await get_live_setting(context, live_info.live_setting_id)
         if live_setting is not None:
@@ -316,6 +319,18 @@ async def get_achieved_goal_id_list(context: idol.BasicSchoolIdolContext, clear_
                 g.live_goal_reward_id for g in goal_list_by_type[const.LIVE_GOAL_TYPE.CLEAR] if clear_rank <= g.rank
             )
 
+            debugresult.extend(
+                g for g in goal_list_by_type[const.LIVE_GOAL_TYPE.SCORE] if score_rank <= g.rank
+            )
+            debugresult.extend(
+                g for g in goal_list_by_type[const.LIVE_GOAL_TYPE.COMBO] if combo_rank <= g.rank
+            )
+            debugresult.extend(
+                g for g in goal_list_by_type[const.LIVE_GOAL_TYPE.CLEAR] if clear_rank <= g.rank
+            )
+            
+    
+    #print(str(debugresult))
     return result
 
 
@@ -429,7 +444,9 @@ async def get_special_live_rotation_difficulty_id(context: idol.BasicSchoolIdolC
                 result[group_id] = live_difficulty_id
                 break
 
-    return result
+    #return result
+    fakeresult: dict[int, int] = {}
+    return fakeresult
 
 
 async def get_special_live_status(context: idol.BasicSchoolIdolContext, /, user: main.User):

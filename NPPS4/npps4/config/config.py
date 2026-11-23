@@ -52,7 +52,12 @@ def get_data_directory():
 
 def is_maintenance():
     global ROOT_DIR
-    return os.path.isfile(os.path.join(ROOT_DIR, "maintenance.txt"))
+    if os.path.isfile(os.path.join(ROOT_DIR, "maintenance.txt")):
+        os.remove(os.path.join(ROOT_DIR, "maintenance.txt"))
+        return True
+    #elif not ap_client.is_connected:
+       # return True
+    return False
 
 
 def get_latest_version():

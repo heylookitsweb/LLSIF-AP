@@ -22,6 +22,7 @@ from .. import idol
 from .. import util
 from ..db import achievement
 from ..db import main
+from ..apworld import ap_client
 
 from typing import Any
 
@@ -1370,6 +1371,8 @@ async def get_achievement_rewards(context: idol.BasicSchoolIdolContext, ach: mai
 
     server_data = data.get()
     old_reward_data = server_data.achievement_reward.get(ach_id, ACHIEVEMENT_REWARD_DEFAULT)
+    if isinstance(ach, main.Achievement) and ap_client.is_connected and not ap_client.fake_ach_items == [] and ach.achievement_id == 10290152:
+        old_reward_data = ap_client.fake_ach_items.pop(0)
     return [await advanced.deserialize_item_data(context, i) for i in old_reward_data]
 
 
@@ -1580,6 +1583,18 @@ async def _check_impl(
 
 async def check(context: idol.BasicSchoolIdolContext, target_user: main.User, /, *updates):
     container = AchievementContext()
+    
+    if ap_client.fake_ach_check:
+        ap_client.fake_ach_check = False
+        q = sqlalchemy.select(main.Achievement).where(
+            main.Achievement.user_id == target_user.id,
+            main.Achievement.achievement_id == 10290152,
+        )
+        result = await context.db.main.execute(q)
+        for ach in result.scalars():
+            for count in range(len(ap_client.fake_ach_items)):
+                container.accomplished.append(ach)
+            break
 
     for update_instance in updates:
         await _check_impl(context, target_user, update_instance, container)
@@ -1655,23 +1670,23 @@ async def give_achievement_reward(
 ):
     for r in rewards:
         # TODO: Proper message for reward insertion
-        if r.reward_box_flag:
-            await reward.add_item(
-                context,
-                user,
-                r,
-                ach_info.title or "FIXME",
-                ach_info.title_en or ach_info.title or "FIXME EN",
-            )
-        else:
-            add_result = await advanced.add_item(context, user, r)
-            if not add_result.success:
+            if r.reward_box_flag and not r.add_type == const.ADD_TYPE.SCENARIO and not r.add_type == const.ADD_TYPE.LIVE:
                 await reward.add_item(
                     context,
                     user,
                     r,
                     ach_info.title or "FIXME",
                     ach_info.title_en or ach_info.title or "FIXME EN",
+                )
+            else:
+                add_result = await advanced.add_item(context, user, r)
+                if not add_result.success and not r.add_type == const.ADD_TYPE.SCENARIO and not r.add_type == const.ADD_TYPE.LIVE:
+                    await reward.add_item(
+                        context,
+                        user,
+                        r,
+                        ach_info.title or "FIXME",
+                        ach_info.title_en or ach_info.title or "FIXME EN",
                 )
 
 
@@ -1689,7 +1704,8 @@ async def process_achievement_reward(
         if ach_info is not None:
             if ach_info.auto_reward_flag:
                 await give_achievement_reward(context, user, ach_info, reward_list)
-                await mark_achievement_reward_claimed(context, ach)
+                if not ach.achievement_id == 10290152:
+                    await mark_achievement_reward_claimed(context, ach)
             else:
                 # Backgrounds and titles are always gained, regardless of the auto_reward_flag
                 for r in reward_list:

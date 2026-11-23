@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{{ slot_name }}'s Tracker</title>
+	<meta charset="UTF-8"/>
+	<style>
+		body {
+			background: linear-gradient(#FFFFFF, #FFEEFF);
+			background-attachment: fixed;
+		}
+		table,
+		th,
+		td {
+			border-collapse: separate;
+			border-spacing: 0;
+			font-family: Meiryo;
+			text-align: center;
+		}
+		table {
+			border: 3px solid #EE0077;
+			border-radius: 10px;
+			background-color: #FFFFFF;
+		}
+		th {
+			border-left: 0px;
+			border-right: 3px solid #EE0077;
+			border-top: 0px;
+			border-bottom: 3px solid #EE0077;
+			padding-left: 4px;
+			padding-right: 4px;
+			padding-top: 2px;
+			padding-bottom: 2px;
+			color: #FF3578;
+		}
+		td {
+			border-left: 0px;
+			border-right: 3px solid #EE0077;
+			border-top: 0px;
+			border-bottom: 3px solid #EE0077;
+			padding-left: 2px;
+			padding-right: 2px;
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+		th:last-child {
+			border-right: 0px;
+		}
+		td:last-child {
+			border-right: 0px;
+			
+		}
+		tr:last-child td {
+			border-bottom: 0px;
+		}
+		td.name {
+			border-right: 3px solid #EE0077;
+		}
+		td.last_name {
+			border-right: 3px solid #EE0077;
+			border-bottom: 0px;
+		}
+		p,
+		h1 {
+			font-family: Meiryo;
+		}
+		b, h1 {
+			color: #FF3578;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 id="header" style="text-align: center">Archipelago Tracker</h1>
+	<div class="main" style="justify-items:center">
+		<p>
+			<b>Server: </b> {{ options[13] }}<br>
+			<b>Current Player: </b> {{ options[12] }}<br>
+			<b>Completed Tracks: </b> {{ completion }}/{{ options[9] }} ({{ completion_percent }}%)<br>
+		</p>
+		<table>
+			{% if not options[0] %}
+				<thead>
+					<tr>
+						<th colspan=7>Live Show Checks</th>
+					</tr>
+					<tr>
+						<th>Track</th>
+						<th>Clear</th>
+						{% if options[5] >= 1 %}
+							<th>C Rank</th>
+						{% endif %}
+						{% if options[5] >= 2 %}
+							<th>B Rank</th>
+						{% endif %}
+						{% if options[5] >= 3 %}
+							<th>A Rank</th>
+						{% endif %}
+						{% if options[5] >= 4 %}
+							<th>S Rank</th>
+						{% endif %}
+						{% if options[6] %}
+							<th>Full Combo</th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in available_checks %}
+						<tr>
+							<td>{{ item[0] }}</td>
+							<td>
+								{% if item[1][0] %}
+									<b>✓</b>
+								{% endif %}
+							</td>
+							{% if options[5] >= 1 %}
+								<td>
+									{% if item[1][1] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+							{% endif %}
+							{% if options[5] >= 2 %}
+								<td>
+									{% if item[1][2] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+							{% endif %}
+							{% if options[5] >= 3 %}
+								<td>
+									{% if item[1][3] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+							{% endif %}
+							{% if options[5] >= 4 %}
+								<td>
+									{% if item[1][4] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+							{% endif %}
+							{% if options[6] %}
+								<td>
+									{% if item[1][5] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			{% else %}
+				<thead>
+					<tr>
+						<th colspan=8>Live Show Checks</th>
+					</tr>
+					<tr>
+						<th>Track</th>
+						<th>Difficulty</th>
+						<th>Clear</th>
+						{% if options[5] >= 1 %}
+							<th>C Rank</th>
+						{% endif %}
+						{% if options[5] >= 2 %}
+							<th>B Rank</th>
+						{% endif %}
+						{% if options[5] >= 3 %}
+							<th>A Rank</th>
+						{% endif %}
+						{% if options[5] >= 4 %}
+							<th>S Rank</th>
+						{% endif %}
+						{% if options[6] %}
+							<th>Full Combo</th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in available_checks %}
+						<tr>
+							{% if item[6] %}
+								{% if options[7] == 1 %}
+									<td rowspan=2 class="last_name">{{ item[0] }}</td>
+								{% elif options[7] == 2 %}
+									<td rowspan=3 class="last_name">{{ item[0] }}</td>
+								{% elif options[7] == 3 %}
+									<td rowspan=4 class="last_name">{{ item[0] }}</td>
+								{% elif options[7] == 4 %}
+									<td rowspan=5 class="last_name">{{ item[0] }}</td>
+								{% endif %}
+							{% else %}
+								{% if options[7] == 1 %}
+									<td rowspan=2 class="name">{{ item[0] }}</td>
+								{% elif options[7] == 2 %}
+									<td rowspan=3 class="name">{{ item[0] }}</td>
+								{% elif options[7] == 3 %}
+									<td rowspan=4 class="name">{{ item[0] }}</td>
+								{% elif options[7] == 4 %}
+									<td rowspan=5 class="name">{{ item[0] }}</td>
+								{% endif %}
+							{% endif %}
+							
+						</tr>
+						{% if options[1] %}
+							<tr>
+								<td>Easy</td>
+								<td>
+									{% if item[2][0] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+								{% if options[5] >= 1 %}
+									<td>
+										{% if item[2][1] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 2 %}
+									<td>
+										{% if item[2][2] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 3 %}
+									<td>
+										{% if item[2][3] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 4 %}
+									<td>
+										{% if item[2][4] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[6] %}
+									<td>
+										{% if item[2][5] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+							</tr>
+						{% endif %}
+						{% if options[2] %}
+							<tr>
+								<td>Normal</td>
+								<td>
+									{% if item[3][0] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+								{% if options[5] >= 1 %}
+									<td>
+										{% if item[3][1] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 2 %}
+									<td>
+										{% if item[3][2] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 3 %}
+									<td>
+										{% if item[3][3] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 4 %}
+									<td>
+										{% if item[3][4] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[6] %}
+									<td>
+										{% if item[3][5] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+							</tr>
+						{% endif %}
+						{% if options[3] %}
+							<tr>
+								<td>Hard</td>
+								<td>
+									{% if item[4][0] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+								{% if options[5] >= 1 %}
+									<td>
+										{% if item[4][1] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 2 %}
+									<td>
+										{% if item[4][2] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 3 %}
+									<td>
+										{% if item[4][3] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 4 %}
+									<td>
+										{% if item[4][4] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[6] %}
+									<td>
+										{% if item[4][5] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+							</tr>
+						{% endif %}
+						{% if options[4] %}
+							<tr>
+								<td>Expert</td>
+								<td>
+									{% if item[5][0] %}
+										<b>✓</b>
+									{% endif %}
+								</td>
+								{% if options[5] >= 1 %}
+									<td>
+										{% if item[5][1] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 2 %}
+									<td>
+										{% if item[5][2] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 3 %}
+									<td>
+										{% if item[5][3] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[5] >= 4 %}
+									<td>
+										{% if item[5][4] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+								{% if options[6] %}
+									<td>
+										{% if item[5][5] %}
+											<b>✓</b>
+										{% endif %}
+									</td>
+								{% endif %}
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			{% endif %}
+			</table>
+			<br>
+
+			{% if options[14] and (options[10] or options[11]) %}
+			<table>
+				<thead>
+					<tr>
+						<th colspan=2>Story Checks</th>
+					</tr>
+					<tr>
+						<th>Chapter</th>
+						<th>Story</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if options[10] %}
+						{% for chapter in story_chapters[0] %}
+							{% if chapter[3] and not options[11] %}
+								{% if chapter[1] == 1 %}
+									<tr>
+										<td rowspan=2 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 2 %}
+									<tr>
+										<td rowspan=3 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 3 %}
+									<tr>
+										<td rowspan=4 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 4 %}
+									<tr>
+										<td rowspan=5 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 5 %}
+									<tr>
+										<td rowspan=6 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+							{% else %}
+								{% if chapter[1] == 1 %}
+									<tr>
+										<td rowspan=2 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 2 %}
+									<tr>
+										<td rowspan=3 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 3 %}
+									<tr>
+										<td rowspan=4 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 4 %}
+									<tr>
+										<td rowspan=5 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 5 %}
+									<tr>
+										<td rowspan=6 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+							{% endif %}
+							{% for ep in chapter[2] %}
+								<tr>
+									<td>
+										{% if ep %}
+											<b>✓</b>
+										{% else %}
+											​
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+						{% endfor %}
+					{% endif %}
+
+					{% if options[11] %}
+						{% for chapter in story_chapters[1] %}
+							{% if chapter[3] %}
+								{% if chapter[1] == 1 %}
+									<tr>
+										<td rowspan=2 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 2 %}
+									<tr>
+										<td rowspan=3 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 3 %}
+									<tr>
+										<td rowspan=4 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 4 %}
+									<tr>
+										<td rowspan=5 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 5 %}
+									<tr>
+										<td rowspan=6 class="last_name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+							{% else %}
+								{% if chapter[1] == 1 %}
+									<tr>
+										<td rowspan=2 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 2 %}
+									<tr>
+										<td rowspan=3 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 3 %}
+									<tr>
+										<td rowspan=4 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 4 %}
+									<tr>
+										<td rowspan=5 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+								{% if chapter[1] == 5 %}
+									<tr>
+										<td rowspan=6 class="name">{{ chapter[0] }}</td>
+									</tr>
+								{% endif %}
+							{% endif %}
+							{% for ep in chapter[2] %}
+								<tr>
+									<td>
+										{% if ep %}
+											<b>✓</b>
+										{% else %}
+											​
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+						{% endfor %}
+					{% endif %}
+					
+				</tbody>
+			</table>
+			{% endif %}
+	</div>
+</body>
+
+</html>
