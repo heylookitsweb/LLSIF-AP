@@ -15,29 +15,30 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 - Items can be collected through the Present Box in the Home Menu.
 - Failing a live show or quitting early will send a Deathlink, if enabled.
 
-# Requirements
+## Requirements
 - Windows Computer (Linux may be supported in the future.)
 - Phone capable of running SIF (Most devices should work)
 - A personal WiFi connection for the two devices to communicate, or a method to port-forward the server
 
-# Server Setup
+## Server Setup
 1. Download the [latest version](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/) of the server.
 2. Extract the server onto your computer somewhere. (Don't run it straight from the zip!)
-3. Open the server executable:
+3. The `config.toml` file can be modified if needed (such as chaning the game assets source), but the defaults should work fine for most.
+4. Open the server executable:
    - Windows: Run `npps4.exe`
-4. The server will download necessary database files upon first startup, then the server will open.
-5. Use this server whenever you want to play a Multiworld, it holds unique save files for each world you play.
+5. The server will download necessary database files upon first startup, then the server will open.
+6. Use this server whenever you want to play a Multiworld, it holds unique save files for each world you play.
 
 (Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md) *should* also work, though this hasn't been tested)
 
-# Connecting
+## Connecting
 1. Create a patched game client using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
    - Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. Ex. `http://192.0.2.0:51376`.
    - Your mobile device must be connected to the same internet connection as your computer. (Unless you are port forwarding)
-2. If you already have the app installed, go to the app settings to set the server address. (To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`)
-3. Using the client, start your game, and progress through the steps of account creation until you reach the AP login screen.
+   - In the future if you already have the app installed, go to the app settings to set the server address as done above, instead of creating another installer. (To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`)
+3. Using the client, start your game, and progress through the steps of data downloading and account creation until you reach the AP login screen.
 4. Login to the Multiworld, and the linked account will be created / loaded.
 
 # Credits
-- [NPPS4](https://github.com/DarkEnergyProcessor/NPPS4) Private Server by MikuAuahDark
+- [NPPS4](https://github.com/DarkEnergyProcessor/NPPS4) Private Server by MikuAuahDark, the vanilla server this implementation is based on.
 - [archipelagopy](https://github.com/blackoutroulette/archipelagopy) by blackoutroulette (API wrapper for Archipelago, used to create the client used in the server)
