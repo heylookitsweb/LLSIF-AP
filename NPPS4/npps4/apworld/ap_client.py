@@ -507,6 +507,8 @@ def update_secretbox_data(data: schema.SerializedServerData):
                 if any(names[name_id] in box.id_string for name_id in options["included_groups"]):
                     secretbox_data.append(box)
         return secretbox_data
+    else:
+        return data.secretbox_data
 
 async def check_completion():
     global save_data
@@ -662,7 +664,6 @@ async def check_story_completion(scenario_id):
         for ep in chapter["episodes"]:
             if ep["id"] == scenario_id:
                 for ep in chapter["episodes"]:
-                    print(await system.scenario.is_completed(ap_context, linked_user, ep["id"]))
                     if chapter["id"] == 1000 or chapter["id"] == 2000 or (not ep["id"] == scenario_id and not await system.scenario.is_completed(ap_context, linked_user, ep["id"])):
                         return
                 await send_check((4000 + counter))
