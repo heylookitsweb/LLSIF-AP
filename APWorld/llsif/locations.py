@@ -174,5 +174,3 @@ def create_regular_locations(world: LLSIFWorld) -> None:
                 region.add_locations(get_location_names_with_ids([f"{eponym} - {name}"]), LLSIFLocation)
 
     #region.add_event("Goal Live Count Completed", "Victory", location_type=LLSIFLocation, item_type=items.LLSIFItem)
-
-    print("LOC")
