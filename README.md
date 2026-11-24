@@ -2,13 +2,13 @@
 Archipelago Multiworld implementation for Love Live! School idol festival, built on the [NPPS4 Private Server](https://github.com/DarkEnergyProcessor/NPPS4).
 
 > [!WARNING]
-> This AP is very early in development and has not been extensively tested.
+> This AP is very rough, early in development, and has not been extensively tested.
 > If you run into any problems, please ping me (@ohheywebisherenow) in
 > this implementation's post in the [Discord](https://discord.gg/Nu4X9gmGDR), 
 > with context and console screenshots if applicable.
 
 # AP Implementation
-- Your goal is finishing a select amount of unique live shows, set in the options for your slot.
+- Your goal is 'completing' a select amount of unique live shows. The number of shows and completion requirements (difficulty / song rank) can be adjusted in your options.
 - Checks are sent for clearing / achieving score ranks / achieving full combos in live shows, and reading Main Story chapters (optionally).
 - Items available to receive are unlocks for new live shows to play, and new Main Story Chapters.
 - Filler items are Gs, Love Gems Friend Points, and Support Units. (Can be configured in your options)
@@ -31,14 +31,17 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 (Installing/Running from the included source following [the vanilla server's instructions](https://github.com/heylookitsweb/LLSIF-AP/blob/main/NPPS4/README.md#install-manually) *should* also work, though this hasn't been tested)
 
 ## Connecting
-1. If you haven't installed a patched client, create one using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
+1. Download and install `llsif.apworld` from the [latest release](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/). 
+2. Create your .yaml file using the Options Creator in the Archipelago Launcher, then generate your multiworld and get it hosted, either locally or on the Archipelago website.
+3. If you haven't installed a patched client, create one using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
    - The game installation for the public server will work for this one too, just change the server address as explained below.
-   - The Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. (Ex. `http://192.0.2.0:51376`)
+   - The Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. (Ex. `http://192.0.2.0:51376`) On Windows, this can be found by running `ipconfig` in Command Prompt, then looking for `IPv4 Address`.
    - In the future, the server address can be changed in the app's settings, instead of creating another installer.
    - To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`.
-3. Start the game, and progress through data download and account creation until you reach the AP login screen.
+4. Start the game, and progress through data download and account creation until you reach the AP login screen.
    - Your mobile device must be connected to the same internet connection as your computer, unless you are port forwarding.
-4. Login to the Multiworld, and your account will be created/loaded.
+5. Login to the Multiworld, and your account will be created/loaded.
+(Currently, the server can only support a single AP player at a time. If multiple people want to play SIF in a Multiworld, they must each host their own server. Support for multiple players is planned for the future.)
 
 ## Tracker
 On the computer hosting the server, opening [http://127.0.0.1:51376](http://127.0.0.1:51376) in your browser will take you to a tracker page for the connected player, showing live tracks and story chapters you have available checks in. To update the tracker, reload the page.
