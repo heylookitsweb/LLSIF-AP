@@ -36,3 +36,7 @@ async def maintenance_page(request: fastapi.Request):
                     message = "\n".join(exc)
 
         return app.templates.TemplateResponse(request, "error.html", {"error": message})
+
+@app.core.get("/favicon.ico", response_class=fastapi.responses.FileResponse)
+async def favicon():
+    return fastapi.responses.FileResponse("static/img/favicon.ico")
