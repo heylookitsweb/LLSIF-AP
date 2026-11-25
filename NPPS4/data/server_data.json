@@ -7531,51 +7531,7 @@
                     "item_id": 4
                 }
             ]
-        },
-		{
-			"achievement_id": 10015,
-			"rewards": [
-				{
-					"add_type": 5000,
-					"item_id": 16
-				}
-			]
-		},
-		{
-			"achievement_id": 10370013,
-			"rewards": [
-				{
-					"add_type": 3000,
-					"item_id": 3,
-					"amount": 3000
-				},
-				{
-					"add_type": 3001,
-					"item_id": 4
-				},
-				{
-					"add_type": 5000,
-					"item_id": 19
-				}
-			]
-		},
-		{
-			"achievement_id": 10370001,
-			"rewards": [
-				{
-					"add_type": 5000,
-					"item_id": 141
-				},
-                {
-					"add_type": 5000,
-					"item_id": 166
-				},
-                {
-					"add_type": 5000,
-					"item_id": 186
-				}
-			]
-		}
+        }
     ],
     "live_unit_drop_chance": {
         "common": 9,
