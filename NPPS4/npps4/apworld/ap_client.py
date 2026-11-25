@@ -57,12 +57,11 @@ class SIFClient(Client):
         global mainclient
         global initialized
         global room_seed
-        #print(str(packet))
-        #print(type(packet))
-        #print(save_data["room_info"])
         gamelist = []
+
         for game in packet.games:
             gamelist.append(game)
+
         await mainclient.send(
             packets.ConnectUpdate(
                 items_handling=ItemHandlingFlag.OWN_WORLD | ItemHandlingFlag.OTHER_WORLDS | ItemHandlingFlag.STARTING_INVENTORY,
@@ -77,7 +76,7 @@ class SIFClient(Client):
 
         room_info = packet
         room_seed = str(packet.seed_name)
-        #print(packet)
+
         if os.path.isfile(os.path.join(config.ROOT_DIR, f"data\\apsaves\\{room_seed}.json")):
             save_data = json.load(open(os.path.join(config.ROOT_DIR, f"data\\apsaves\\{room_seed}.json"),"r"))
         
@@ -90,7 +89,6 @@ class SIFClient(Client):
         global sloomber_event
         global ap_item_data
 
-        #print(packet)
         ap_item_data = packet.locations
         sloomber_event.set()
 
@@ -113,7 +111,6 @@ class SIFClient(Client):
         sloomber_event.set()
         with open(os.path.join(config.ROOT_DIR, "maintenance.txt"), "w") as maintenance:
             maintenance.write("Disconnected from APWorld. Please Reconnect.")
-        #await self.stop()
 
     async def on_connected(self, packet: packets.Connected):
         global connectionerror
@@ -127,9 +124,7 @@ class SIFClient(Client):
         connectionerror = None
         is_connected = True
         options = packet.slot_data
-        print(packet.slot_info)
         slot_info = packet.slot_info
-        #print(options)
         sloomber_event.set()
 
     #async def on_packet(self, packet: Server):
@@ -141,12 +136,9 @@ class SIFClient(Client):
         global ap_context
         global unclaimed_items
         global room_seed
-        #print(str(packet) + "\n")
-        #print(packet)
         if packet.index == 0:
             unclaimed_items = []
         for received_item in packet.items:
-            #print(received_item)
             unclaimed_items.append(received_item)
 
 
@@ -228,7 +220,6 @@ async def reward_sync():
 
     item_list = unclaimed_items.copy()
     for received_item in item_list:
-        #print(received_item)
         if received_item.item < 1000 or received_item.item >= 10000:
             if not str(received_item.item) in save_data["filler_item_counts"]:
                 save_data["filler_item_counts"][str(received_item.item)] = 0
@@ -316,7 +307,6 @@ async def new_user(id: int):
 
     if is_connected:
         base_data = json.load(open(os.path.join(config.ROOT_DIR, "data\\apsaves\\base.json"), "r"))
-        #base_data["room_seed"] = str(room_seed)
         user_id = id
         base_data["user_id"] = user_id
         save_data = base_data
@@ -343,8 +333,7 @@ async def live_complete(live_setting, score_rank, combo_rank):
     real_score_rank = 5 - score_rank
     real_combo_rank = 5 - combo_rank
     checklist = []
-    #print(real_score_rank)
-    #print(real_combo_rank)
+
     if not str(track_id) in save_data["completion"]:
         save_data["completion"][str(track_id)] = []
     if not str(track_id+1000) in save_data["tracker"]:
@@ -396,7 +385,6 @@ async def live_complete(live_setting, score_rank, combo_rank):
             if options["fc_checks"] == 1 and real_combo_rank == 4:
                 checklist.append(105000 + (difficulty*10000) + track_id)
     if len(checklist) > 0:
-        #print(checklist)
         await send_check(checklist)
     await check_completion()
     write_save_file()
@@ -452,29 +440,16 @@ async def update_sticker_shop(data: list):
                 for shop_item in ap_item_data:
                     hint_ids[slot_info[shop_item.player].game][shop_item.item] = None
                     hints.append({"id": shop_item.item, "location": shop_item.location, "player": shop_item.player, "name": f"{slot_info[shop_item.player].name}'s Unknown Item"})
-                print(hint_ids)
 
                 for game in game_data:
                     if not hint_ids[game] == {}:
                         for item, id in game_data[game].item_name_to_id.items():
                             if id in hint_ids[game]:
                                 hint_ids[game][id] = item
-                print(hint_ids)
                 for hint in hints:
                     name = hint_ids[slot_info[hint["player"]].game][hint["id"]]
                     if name is not None:
                         hint["name"] = f"{slot_info[hint["player"]].name}'s {name}"
-
-
-
-
-                #for game_id in range(1,len(hint_ids)+1):
-                    #if not hint_ids[game_id] == []:
-                        #for item in game_data[game_id].item_name_to_id:
-                            #if game_data[game_id].item_name_to_id[item] in hint_ids[game_id]:
-                                #for hint in hints:
-                                    #if hint["player"] == game_id and hint["id"] == game_data[game_id].item_name_to_id[item]:
-                                        #hint["name"] = f"{playerlist[game_id-1].name}'s {item}"
                 
             for item in result:
                 if "ap_item" in item.id_string:
