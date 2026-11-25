@@ -140,7 +140,7 @@ def create_all_items(world: LLSIFWorld) -> None:
         for group in world.included_group_ids:
             big_number += sticker_rates[group-1]
         big_number /= len(world.included_group_ids)
-        item_count = (world.options.shop_checks * 10) / big_number
+        item_count = ((world.options.shop_checks * 10) / big_number) * 0.5
         for item in range(0,round(item_count)):
             itempool.append(world.create_item("5 Love Gems"))
 
