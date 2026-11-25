@@ -159,8 +159,7 @@ async def login_login(context: idol.SchoolIdolAuthParams, request: LoginRequest)
     u = await user.find_by_key(context, str(loginkey, "UTF-8"))
     if u is None:
         if ap_client.is_connected:
-            # This will send "Your data has been transfered succesfully" message to the SIF client.
-            raise error.IdolError(error_code=407, status_code=600, detail="Login not found")
+            u = await user.create(context, str(loginkey, "UTF-8"), str(passwd, "UTF-8"), 0)
         else:
             u = await user.create(context, str(loginkey, "UTF-8"), str(passwd, "UTF-8"), -1)
             
