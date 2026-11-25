@@ -122,8 +122,8 @@ async def get_user_info(context: idol.BasicSchoolIdolContext, user: main.User):
     )
 
 
-async def create(context: idol.BasicSchoolIdolContext, key: str | None, passwd: str | None):
-    user = main.User(key=key)
+async def create(context: idol.BasicSchoolIdolContext, key: str | None, passwd: str | None, tutstate: int | None):
+    user = main.User(key=key, tutorial_state=tutstate)
     if passwd is not None:
         user.set_passwd(passwd)
     context.db.main.add(user)

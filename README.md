@@ -34,10 +34,10 @@ Archipelago Multiworld implementation for Love Live! School idol festival, built
 1. Download and install `llsif.apworld` from the [latest release](https://github.com/heylookitsweb/LLSIF-AP/releases/latest/). 
 2. Create your .yaml file using the Options Creator in the Archipelago Launcher, then generate your multiworld and get it hosted, either locally or on the Archipelago website.
 3. If you haven't installed a patched client, create one using [https://ethanaobrien.github.io/sif-patcher/](https://ethanaobrien.github.io/sif-patcher/) (Only necessary once)
-   - The game installation for the public server will work for this one too, just change the server address as explained below.
+   - On Android, install the created .apk file normally. On IOS, You need an app to sideload the created file.
    - The Server URL should be the ip address of the computer you are hosting the NPPS4 server on, followed by the port `51376`. (Ex. `http://192.0.2.0:51376`) On Windows, this can be found by running `ipconfig` in Command Prompt, then looking for `IPv4 Address`.
    - In the future, the server address can be changed in the app's settings, instead of creating another installer.
-   - To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`.
+   - The game installation for the public server will work for this one too, just change the server address as explained above. To switch back to the public server if you play on it, change the address to `http://sif.ethanthesleepy.one`.
 4. Start the game, and progress through data download and account creation until you reach the AP login screen.
    - Your mobile device must be connected to the same internet connection as your computer, unless you are port forwarding.
 5. Login to the Multiworld, and your account will be created/loaded.
