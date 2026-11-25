@@ -26,7 +26,7 @@ ITEM_NAME_TO_ID = {
     "500 Friend Points": 7,
     "1000 Friend Points": 8,
     "New Background": 9,
-    "5 Love Gems*": 10,
+    "5 Love Gems": 10,
 }
 
 DEFAULT_ITEM_CLASSIFICATIONS = {
@@ -39,7 +39,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "500 Friend Points": ItemClassification.filler,
     "1000 Friend Points": ItemClassification.filler,
     "New Background": ItemClassification.filler,
-    "5 Love Gems*": ItemClassification.useful
+    "5 Love Gems": ItemClassification.useful
 
 }
 
@@ -142,7 +142,7 @@ def create_all_items(world: LLSIFWorld) -> None:
         big_number /= len(world.included_group_ids)
         item_count = (world.options.shop_checks * 10) / big_number
         for item in range(0,round(item_count)):
-            itempool.append(world.create_item("5 Love Gems*"))
+            itempool.append(world.create_item("5 Love Gems"))
 
 
     number_of_items = len(itempool)
