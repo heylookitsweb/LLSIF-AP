@@ -175,6 +175,10 @@ async def get_presentbox_simple(
 async def count_presentbox(
     context: idol.BasicSchoolIdolContext, /, user: main.User, filter_config: FilterConfig | None = None
 ):
+    ap_client.ap_context = context
+    ap_client.linked_user = user
+    await ap_client.reward_sync()
+    
     if context.support_background_task():
         context.add_task(try_cleanup_incentive)
 
