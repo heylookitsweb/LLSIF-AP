@@ -81,7 +81,7 @@ class LiveRank(Choice):
     option_b_rank = 2
     option_a_rank = 3
     option_s_rank = 4
-    default = option_b_rank
+    default = option_any_rank
 
 class FullComboChecks(Toggle):
     """
@@ -132,7 +132,7 @@ class IncludedDifficulty(OptionSet):
 
 class FillerSupportPercentage(Range):
     """
-    Percentage chance that a filler item will send you a Support Unit (N Girls).
+    Percent chance that a filler item will send you a Support Unit (N Girls).
     """
 
     display_name = "Support Unit Filler Percent"
