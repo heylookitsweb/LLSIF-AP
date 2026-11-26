@@ -160,6 +160,7 @@ async def login_login(context: idol.SchoolIdolAuthParams, request: LoginRequest)
     if u is None:
         if ap_client.is_connected:
             u = await user.create(context, str(loginkey, "UTF-8"), str(passwd, "UTF-8"), 0)
+            await ap_client.new_user(u.id)
         else:
             u = await user.create(context, str(loginkey, "UTF-8"), str(passwd, "UTF-8"), -1)
             
@@ -172,6 +173,9 @@ async def login_login(context: idol.SchoolIdolAuthParams, request: LoginRequest)
     token = await session.encapsulate_token(context, context.token.server_key, context.token.client_key, u.id)
 
     if ap_client.is_connected:
+        slot_name = ap_client.slot_name[:10]
+        if not any(ord(c) < 32 for c in slot_name):
+            u.name = slot_name
         for live_id in ap_client.options["starting_lives"]:
             await live.unlock_normal_live(context, u, live_id-1000)
     #await live.unlock_normal_live(context, u, 1)
